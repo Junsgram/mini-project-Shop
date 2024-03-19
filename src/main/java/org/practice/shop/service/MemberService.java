@@ -3,13 +3,14 @@ package org.practice.shop.service;
 import org.practice.shop.constant.Role;
 import org.practice.shop.dto.MemberDTO;
 import org.practice.shop.entity.Member;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface MemberService {
     // 회원가입
     Member saveMember(MemberDTO memberDTO);
     // 이메일 중복체크
     String validateMember(MemberDTO dto);
-
     default Member dtoToEntity(MemberDTO dto) {
         Member member = Member.builder()
                 .name(dto.getName())
@@ -20,4 +21,5 @@ public interface MemberService {
                 .build();
         return member;
     }
+
 }
