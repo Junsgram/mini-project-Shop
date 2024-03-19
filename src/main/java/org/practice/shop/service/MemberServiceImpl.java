@@ -5,6 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.practice.shop.dto.MemberDTO;
 import org.practice.shop.entity.Member;
 import org.practice.shop.repository.MemberRepository;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService {
+public class MemberServiceImpl implements MemberService, UserDetailsService {
     public final MemberRepository memberRepository;
     public final PasswordEncoder passwordEncoder;
     @Override
@@ -35,5 +39,19 @@ public class MemberServiceImpl implements MemberService {
         }
         // 등록 가능한 이메일
         return "fail";
+    }
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Member member = memberRepository.findByEmail(username);
+        if(member == null){
+            // 예외 발생
+            throw new UsernameNotFoundException(username);
+        }
+        return User.builder()
+                .username(member.getEmail())
+                .password(member.getPassword())
+                // Role 객체로 리턴하여 toString으로 문자열로 변환
+                .roles(member.getRole().toString())
+                .build();
     }
 }

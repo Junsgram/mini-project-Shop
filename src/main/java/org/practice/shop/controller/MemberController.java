@@ -6,10 +6,10 @@ import org.practice.shop.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/member")
@@ -34,5 +34,14 @@ public class MemberController {
     public ResponseEntity<String> memberEmailCheck(MemberDTO dto){
         String result = memberService.validateMember(dto);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    @GetMapping("/login")
+    public String loginMember() {
+        return "/member/memberLogin";
+    }
+    @GetMapping("/login/error")
+    public String loginMember(Model model) {
+        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
+        return "/member/memberLogin";
     }
 }
