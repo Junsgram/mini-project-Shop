@@ -26,7 +26,7 @@ public class ItemRepositoryTests {
     public void createItemTest() {
         IntStream.rangeClosed(1,30).forEach(i -> {
             Item item = Item.builder()
-                    .itemNum("테스트상품"+i)
+                    .itemNm("테스트상품"+i)
                     .price(10000+i)
                     .itemDetail("테스트 상품 상세"+i)
                     .itemSellStatus(ItemSellStatus.SELL)
@@ -37,7 +37,7 @@ public class ItemRepositoryTests {
     @DisplayName("상품명으로 조회")
     @Test
     void findbyItemNumTest() {
-        List<Item> item = itemRepository.findByItemNum("테스트상품12");
+        List<Item> item = itemRepository.findByItemNm("테스트상품12");
         System.out.println(item);
         item.forEach(i -> {
             System.out.println(i.toString());
@@ -47,7 +47,7 @@ public class ItemRepositoryTests {
     @DisplayName("상품명 or 상품 상세설명으로 조회하기 테스트")
     @Test
     void findByItemNumOrItemDetailTest() {
-        List<Item> result = itemRepository.findByItemNumOrItemDetail("테스트 상품3","테스트 상품 상세12");
+        List<Item> result = itemRepository.findByItemNmOrItemDetail("테스트 상품3","테스트 상품 상세12");
         result.forEach(i ->{
             System.out.println(i.toString());
         });
