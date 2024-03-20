@@ -20,7 +20,7 @@ public class Item extends BaseEntity {
     private Long id; // 상품번호, 기본키
 
     @Column(length = 300, nullable = false)
-    private String itemNum; // 상품명
+    private String itemNm; // 상품명
 
     @Column(nullable = false)
     private int price; // 가격
