@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="www.thymeleaf.org">
+<html lang="en" xmlns:th="www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
     <th:block th:fragment="content">
         <h1> 상세 페이지 </h1>
@@ -32,8 +32,17 @@
                     <!-- 이넘 타입 지정 -->
                     <div th:if="${itemDTO.itemSellStatus==T(org.practice.shop.constant.ItemSellStatus).SELL}"
                          class="text-right">
-                        <button type="button" class="btn btn-light border border-primary btn-lg"> 장바구니 담기</button>
-                        <button type="button" class="btn btn-primary btn-lg"> 주문하기</button>
+                        <!-- isAnonymous 로그인 안했을 경우 -->
+                        <th:block sec:authorize="isAnonymous()">
+                            <button type="button" onclick="login()" class="btn btn-light border border-primary btn-lg"> 장바구니 담기</button>
+                            <button type="button" onclick="login()" class="btn btn-primary btn-lg"> 주문하기</button>
+                        </th:block>
+                        <!-- 로그인 했을 경우 -->
+                        <th:block sec:authorize="isAuthenticated()">
+                            <button type="button" class="btn btn-light border border-primary btn-lg"> 장바구니 담기</button>
+                            <button type="button" onclick="order()" class="btn btn-primary btn-lg"> 주문하기</button>
+                        </th:block>
+
                     </div>
                     <div th:unless="${itemDTO.itemSellStatus==T(org.practice.shop.constant.ItemSellStatus).SELL}"
                          class="text-rigth">
@@ -57,16 +66,43 @@
     </th:block>
 </th:block>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         calculateTotalPrice();
-        $("#count").change(function() {
+        $("#count").change(function () {
             calculateTotalPrice();
         })
     })
+
     function calculateTotalPrice() {
         let count = $("#count").val();
         let price = $("#price").val();
-        $("#totalPrice").html((count * price)+ "원");
+        $("#totalPrice").html((count * price) + "원");
+    }
+
+    // login() - 로그인 안했을 경우 로그인하라는 메세지 출력
+    function login() {
+        alert("로그인 먼저 진행해주세요");
+        location.href="/member/login";
+    }
+    function order() {
+        let paramData = {
+            itemId : $("#itemId").val(),
+            count : $("#count").val()
+        }
+        $.ajax({
+            type: "post",
+            url : "/order",
+            contentType : "application/json; charset=utf-8",
+            data: JSON.stringify(paramData),
+            dataType : "json",
+            success : function(result) {
+                alert("주문이 완료되었습니다.");
+
+            },
+            error : function(error) {
+                alert(error.responseText);
+            }
+        })
     }
 </script>
 </html>

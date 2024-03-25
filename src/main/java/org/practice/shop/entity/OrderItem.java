@@ -11,7 +11,7 @@ import lombok.*;
 @Table(name="order_item")
 @Entity
 @SequenceGenerator(name="order_item_seq",sequenceName = "order_item_seq",initialValue = 1, allocationSize = 1)
-public class OrderItem {
+public class OrderItem extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "order_item_seq")
     @Column(name="order_item_id")
@@ -27,4 +27,9 @@ public class OrderItem {
 
     private int orderPrice;
     private int count;
+
+    // 수량 * 가격 = 가격을 리턴
+    public int getTotalPrice() {
+        return orderPrice * count;
+    }
 }

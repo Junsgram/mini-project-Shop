@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.practice.shop.constant.ItemSellStatus;
 import org.practice.shop.dto.ItemDTO;
+import org.practice.shop.exception.OutOfStockException;
 
 
 @Getter
@@ -44,5 +45,14 @@ public class Item extends BaseEntity {
         this.stockNum = dto.getStockNumber();
         this.itemDetail = dto.getItemDetail();
         this.itemSellStatus = dto.getItemSellStatus();
+    }
+
+    // 상품의 재고를 주문 수량만큼 감소시키기
+    public void removeStock(int stockNum) {
+        int restStock = this.stockNum - stockNum;
+        if(restStock < 0 ) {
+            throw new OutOfStockException("상품의 재고가 부족합니다. (현재 재고 수량 : " + this.stockNum+")");
+        }
+        this.stockNum = restStock;
     }
 }

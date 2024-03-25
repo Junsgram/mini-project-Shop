@@ -40,4 +40,37 @@ public class Order extends BaseEntity {
     // orphanRemoval은 List중 1개를 삭제할 수 있게 true로 값을 지정(고아 객체 제거하는 옵션) - cascade는 List를 모두 삭제해야한다.
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    /**
+     * orderItem에는 주뮨상품정보를 담아줍니다
+     * orderItem객체를 order객체의 order
+     * order엔티티와 orderItem 엔티티가 양방향 참조 관계이므로 orderItem객체에도
+     * order객체를 세팅해줘야합니다.
+     */
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        // 여기서 this는  나 자신이 바라보고 있는 Order 객체
+        orderItem.setOrder(this);
+    }
+
+    // order 객체 리턴
+    public static Order createOrder(Member member, List<OrderItem> orderItems) {
+        Order order = new Order();
+        order.setMember(member);
+        for(OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        order.setOrderStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+    // 전체 금액 리턴
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for(OrderItem orderItem : orderItems) {
+            totalPrice  = orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
 }
