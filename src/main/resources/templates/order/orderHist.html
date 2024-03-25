@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th ="www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <h1> 구매 내역 조회입니다. </h1>
+        <th:block th:each="dto:${result}">
+            <div class="d-flex mb-3 align-slef-center">
+                <h4 th:text="${dto.orderDate}"></h4>
+                <div class="ml-3">
+                    <th:block>
+                        <button> 주문 취소 </button>
+                    </th:block>
+                </div>
+            </div>
+            <div class="card d-flex">
+                <div th:each="orderItem:${dto.orderItemDTOList}">
+                    <div class="repImgDiv">
+                        <img th:src="${orderItem.imgUrl}"/>
+                    </div>
+                    <div class="w-75">
+                        <span th:text="${orderItem.itemNm}"></span>
+                        <p th:text="${orderItem.orderPrice}+'원'"></p>
+                        <p th:text="${orderItem.count}+'개'"></p>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </th:block>
+</th:block>
+</html>
