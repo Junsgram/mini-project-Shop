@@ -1,6 +1,8 @@
 package org.practice.shop.repository;
 
 import org.practice.shop.entity.Item;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -27,5 +29,8 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
     @Query(value = "select * from Item i where i.item_nm like %:item_nm% order by i.price desc", nativeQuery = true)
     List<Item> findByItemNumByNative(@Param("item_nm")String itemnm);
 
+    @Query("select i,m from Item i left outer join ItemImg m " +
+            " on m.item = i where m.repimgYn = 'Y'")
+    Page<Object[]> getListPage(Pageable pageable);
 
 }

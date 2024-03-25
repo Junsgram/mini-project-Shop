@@ -3,6 +3,7 @@ package org.practice.shop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.practice.shop.constant.ItemSellStatus;
+import org.practice.shop.dto.ItemDTO;
 
 
 @Getter
@@ -28,10 +29,20 @@ public class Item extends BaseEntity {
     @Column(nullable = false)
     private int stockNum; // 재고수량
 
-    @Lob // BLOB타입을 매핑해준다 ( 상세설명과 같은 작성할 것이 많은 것을 BLOCK타입으로 지정)
+    @Lob // BLOB타입을s 매핑해준다 ( 상세설명과 같은 작성할 것이 많은 것을 BLOCK타입으로 지정)
     @Column(nullable =false)
     private String itemDetail; // 상세설명
 
     @Enumerated(EnumType.STRING) // Enum타입에 String으로 넣겠다 라는 의미
     private ItemSellStatus itemSellStatus; // 상품판매상태 , SELL, SOLD_OUT
+
+
+    // 업데이트 메소드 구현
+    public void updateItem(ItemDTO dto) {
+        this.itemNm =dto.getItemNm();
+        this.price = dto.getPrice();
+        this.stockNum = dto.getStockNumber();
+        this.itemDetail = dto.getItemDetail();
+        this.itemSellStatus = dto.getItemSellStatus();
+    }
 }

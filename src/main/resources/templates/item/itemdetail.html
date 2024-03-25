@@ -2,14 +2,15 @@
 <html lang="en" xmlns:th="www.thymeleaf.org">
 <th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
     <th:block th:fragment="content">
-        <h1> 상품 등록 페이지 </h1>
-        <form action="/admin/item/new" method="post" th:object="${itemDTO}"
+        <h1> 아이템 상세보기 페이지</h1>
+        <form th:action="@{'/admin/item/'+${itemDTO.id}}" method="post" th:object="${itemDTO}"
               enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}"/>
             <div class="form-group">
-               <select th:field="*{itemSellStatus}">
+                <select th:field="*{itemSellStatus}">
                     <option value="SELL"> 판매중 </option>
                     <option value="SOLD_OUT"> 품절 </option>
-               </select>
+                </select>
             </div>
             <div class="form-group">
                 상품명
@@ -27,15 +28,27 @@
                 상품 상세설명 :
                 <textarea class="form-control" required th:field="*{itemDetail}"></textarea>
             </div>
-            <div class="form-group" th:each="num: ${#numbers.sequence(1,5)}">
+            <!-- 등록된 이미지 인풋값 출력 -->
+            <div class="form-group" th:each="itemImgDTO:${itemDTO.itemImgDTOList}">
                 <div class="custom-file img-div">
-                    상품 이미지 :
-                    <input type="file" name="itemImgFile" id="itemImgFile" class="custom-file-input" />
-                    <label for="itemImgFile" class="custom-file-label" th:text="상품이미지+${num}"></label>
+                    <input type="file" name="itemImgFile" class="custom-file-input">
+                    <input type="hidden" name="itemImgIdx" id="itemImgIdx" th:value="${itemImgDTO.id}">
+                    <label class="custom-file-label" th:text="${itemImgDTO.oriImgName}"></label>
                 </div>
                 <br/>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <!-- 수정 시 추가하 이미지 인풋 출력 -->
+            <div class="form-group"
+                 th:each="num:${#numbers.sequence(1,5-#lists.size(itemDTO.itemImgDTOList))}">
+                <div class="custom-file img-div">
+                    상품 이미지 :
+                    <input type="file" name="itemImgFile" id="itemImgFile" class="custom-file-input"  >
+                    <label for="itemImgFile" class="custom-file-label" th:text="상품이미지+${num}"></label>
+                    <input type="hidden" name="itemImgIdx">
+                </div>
+                <br/>
+            </div>
+            <button type="submit" class="btn btn-primary">수정하기</button>
         </form>
     </th:block>
 </th:block>

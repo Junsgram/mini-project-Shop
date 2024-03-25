@@ -17,7 +17,7 @@ public class ItemImg {
     private Long id;
     private String imgName;                 // 이미지 이름
     private String oriImgName;              // 원본 이미지 이름
-    private String imgUrl;                  // 이미지 경로
+    private String imgUrl;                 // 이미지 경로
     private String repimgYn;                // 대표이미지 지정(Y/N)
 
     @ManyToOne(fetch = FetchType.LAZY)      // 다대일 관계

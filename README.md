@@ -60,7 +60,19 @@
 2. 서비스 인터페이스, 서비스 클래스
 3. 컨트롤러, 화면
 
+---
 
+#### 이미지
+itemadd.html
+관리자가 정보 입력 --> 전송하게되면
+입력 값 : ItemDTO로 받고
+파일    : List<MultipartFile>
+첫 번째 이미지는 필수 전송
+첫 번째 이미지가 없을 경우 다시 itemadd.html로 리턴
+
+ItemService 호출하여 itemDTO, List<MultipartFile>
+itemDTO ---> item엔티티
+item 테이블에 영속 저장 - itemRepository.save(item)
 
 
 
