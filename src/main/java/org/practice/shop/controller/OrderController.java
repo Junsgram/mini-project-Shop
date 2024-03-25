@@ -2,15 +2,19 @@ package org.practice.shop.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.practice.shop.dto.OrderDTO;
+import org.practice.shop.dto.OrderHistDTO;
 import org.practice.shop.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,5 +39,13 @@ public class OrderController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<Long>(orderId,HttpStatus.OK);
+    }
+
+    // 주문 목록 조회
+    @GetMapping("/orders")
+    public String orderHistory(Principal principal, Model model) {
+        List<OrderHistDTO> result = orderService.getOrderList(principal.getName());
+        model.addAttribute("result", result);
+        return "/order/orderHist";
     }
 }
