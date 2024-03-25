@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <h1> 상세 페이지 </h1>
+        <input type="hidden" id="itemId" th:value="${itemDTO.id}"/>
+        <div class="d-flex">
+            <div class="repImgDiv">
+                <img th:src="${itemDTO.itemImgDTOList[0].imgUrl}"
+                     class="reounde repImg"/>
+            </div>
+            <div class="wh50">
+                <div> 판매중</div>
+                <div>
+                    <!-- 가격 표시 -->
+                    <div class="h4 text-danger text-left">
+                        <input type="hidden" th:value="${itemDTO.price}" id="price" name="price"/>
+                        <span th:text="${itemDTO.price}"></span>원
+                    </div>
+                    <!-- 수량 표시 -->
+                    <div class="input-group w-50">
+                        <div> 수량</div>
+                        <input type="number" name="count" id="count"
+                               class="form-control" value="1" min="1"/>
+                    </div>
+                    <!-- 결제 금액 표시 -->
+                    <div class="text-rigth mgt-50">
+                        <h5> 결제 금액 </h5>
+                        <h3 name="totalPrice" id="totalPrice" class="form-weight-bold"></h3>
+                    </div>
+                    <!-- 주문, 장바구니 버튼-->
+                    <!-- 이넘 타입 지정 -->
+                    <div th:if="${itemDTO.itemSellStatus==T(org.practice.shop.constant.ItemSellStatus).SELL}"
+                         class="text-right">
+                        <button type="button" class="btn btn-light border border-primary btn-lg"> 장바구니 담기</button>
+                        <button type="button" class="btn btn-primary btn-lg"> 주문하기</button>
+                    </div>
+                    <div th:unless="${itemDTO.itemSellStatus==T(org.practice.shop.constant.ItemSellStatus).SELL}"
+                         class="text-rigth">
+                        품절입니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 상품 상세 설명 -->
+        <div class="jumbotron jumbotron-fluid mgt-30">
+            <div class="container">
+                <h4> 상품 상세 설멸</h4>
+                <p class="lead" th:text="${itemDTO.itemDetail}"></p>
+            </div>
+        </div>
+        <!-- 이미지들 -->
+        <div th:each="itemImg:${itemDTO.itemImgDTOList}" class="text-center">
+            <img th:if="${not #strings.isEmpty(itemImg.imgUrl)}" th:src="${itemImg.imgUrl}"
+                 class="reounded mbg-15" width="1000"/>
+        </div>
+    </th:block>
+</th:block>
+<script>
+    $(document).ready(function() {
+        calculateTotalPrice();
+        $("#count").change(function() {
+            calculateTotalPrice();
+        })
+    })
+    function calculateTotalPrice() {
+        let count = $("#count").val();
+        let price = $("#price").val();
+        $("#totalPrice").html((count * price)+ "원");
+    }
+</script>
+</html>

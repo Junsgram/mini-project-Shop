@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <h1> 상품 리스트 페이지 </h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col"> # </th>
+                <th scope="col">상품명</th>
+                <th scope="col">상태</th>
+                <th scope="col">가격</th>
+                <th scope="col">재고수량</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="dto:${result.dtoList}">
+                <th scope="row">[[${dto.id}]]</th>
+                <td><a th:href="@{'/admin/item/'+${dto.id}}">[[${dto.itemNm}]]</a></td>
+                <td>[[${dto.itemSellStatus}]]</td>
+                <td>[[${dto.price}]]</td>
+                <td>[[${dto.stockNumber}]]</td>
+            </tr>
+            </tbody>
+        </table>
+        <nav aria-label="page navigation example">
+            <ul class="pagination">
+                <li th:if="${result.prev}" class="page-item"><a class="page-link" href="#">prev</a></li>
+                <li th:each="page:${result.pageList}" class="page-item">
+                    <a class="page-link" th:href="@{/admin/item/list(page=${page})}">[[${page}]]</a>
+                </li>
+                <li class="page-item" th:if="${result.next}"><a class="page-link" href="#">next</a></li>
+            </ul>
+        </nav>
+    </th:block>
+</th:block>
+</html>

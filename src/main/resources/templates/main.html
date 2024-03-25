@@ -2,7 +2,53 @@
 <html lang="en" xmlns:th ="www.thymeleaf.org">
 <th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
     <th:block th:fragment="content">
-        <h1> 메인 페이지 </h1>
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/img/mainimg1.png" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/img/mainimg2.png" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/img/mainimg3.png" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </button>
+        </div>
+        <br/>
+        <br/>
+        <div class="row">
+            <th:block th:each="dto:${result.dtoList}">
+                <div class="col-md-4 margin">
+                    <a th:href="@{'/item/'+${dto.id}}">
+                    <div class="card">
+                        <img th:src="@{${dto.imgUrl}}" height="400"/>
+                        <div class="card-body">
+                            <h4 class="card-title">[[${dto.itemNm}]]</h4>
+                            <p class="card-text"> [[${dto.price}]]원</p>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+            </th:block>
+        </div>
+        <div>
+            이미지 테스트
+            <img src="file/Users/yunseongjun/Documents/Springboot/shopProjectImg/item/260e9b62-ccb0-462e-80f7-d5f7f1a03990.png"/>r
+        </div>
     </th:block>
 </th:block>
 </html>

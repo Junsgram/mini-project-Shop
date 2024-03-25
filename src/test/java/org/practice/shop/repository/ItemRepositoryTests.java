@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -107,6 +109,17 @@ public class ItemRepositoryTests {
         Page<Item> itemPaging = itemRepository.findAll(booleanBuilder,pageable);
         for(Item i : itemPaging) {
             System.out.println(i);
+        }
+    }
+
+    @DisplayName("메인 페이지 대표 이미지 출력 테스트")
+    @Test
+    void mainList() {
+        Pageable pageable = PageRequest.of(0,10,Sort.by("id").descending());
+        Page<Object[]> result = itemRepository.getListPage(pageable);
+        List<Object[]> lists = result.getContent();
+        for(Object[] obj : lists) {
+            System.out.println(Arrays.toString(obj));
         }
     }
 }
