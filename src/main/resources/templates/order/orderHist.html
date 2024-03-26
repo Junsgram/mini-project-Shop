@@ -7,8 +7,11 @@
             <div class="d-flex mb-3 align-slef-center">
                 <h4 th:text="${dto.orderDate}"></h4>
                 <div class="ml-3">
-                    <th:block>
-                        <button> 주문 취소 </button>
+                    <th:block th:if="${dto.orderStatus==T(org.practice.shop.constant.OrderStatus).ORDER}">
+                        <button th:value="${dto.orderId}" th:onclick="cancelOrder(this.value)"> 주문 취소 </button>
+                    </th:block>
+                    <th:block th:unless="${dto.orderStatus==T(org.practice.shop.constant.OrderStatus).ORDER}">
+                        <button> (취소 완료) </button>
                     </th:block>
                 </div>
             </div>
@@ -27,4 +30,21 @@
         </th:block>
     </th:block>
 </th:block>
+<script>
+    function cancelOrder(orderId) {
+        $.ajax({
+            url : "/order/"+orderId+"/cancel",
+            type: "post",
+            dataType: "json",
+            success: function(result) {
+                alert("주문이 취소되었습니다.");
+                location.href="/orders"
+            },
+            error(error) {
+                alert(error.response.getText);
+            }
+        })
+    }
+
+</script>
 </html>

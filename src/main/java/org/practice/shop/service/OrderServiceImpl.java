@@ -10,6 +10,7 @@ import org.practice.shop.repository.ItemRepository;
 import org.practice.shop.repository.MemberRepository;
 import org.practice.shop.repository.OrderRepository;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,5 +83,26 @@ public class OrderServiceImpl implements OrderService {
         // ordderHistDTO의 필드값에 List<OrderItemDTO> 값을 세팅
         dto.setOrderItemDTOList(orderItemDTOList);
         return dto;
+    }
+    // 주문자와 사용자 일치 여부 확인
+    @Override
+    public boolean validateOrder(Long orderId, String email) {
+        // 요청자 member객체 조회
+        Member member = memberRepository.findByEmail(email);
+        // 주문 객체 조회
+        Order order = orderRepository.findById(orderId).get();
+        Member orderMember = order.getMember();
+        // 멤버 객체의 email값이 다른 지 비교
+        if(!StringUtils.equals(member.getEmail(), orderMember.getEmail()))  {
+            return false;
+        }
+        return true;
+    }
+    // 주문 취소 요청
+    @Override
+    public void cancelOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId).get();
+        order.cancelOrder();
+        orderRepository.save(order);
     }
 }
