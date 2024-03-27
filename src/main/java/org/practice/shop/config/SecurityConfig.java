@@ -28,7 +28,7 @@ public class SecurityConfig {
         // loginPage("") : 사용자가 지정한 로그인 페이지
         http.formLogin(login -> login.loginPage("/member/login")
                 // 로그인 성공 시 이동할 페이지
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/",true)
                 // form태그의 action에 지정한 경로와 동일하게 진행
                 .loginProcessingUrl("/loginProc")
                 // 로그인 실패할 경우 이동될 페이지 경로

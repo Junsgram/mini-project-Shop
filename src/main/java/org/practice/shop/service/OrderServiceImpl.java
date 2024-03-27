@@ -105,4 +105,23 @@ public class OrderServiceImpl implements OrderService {
         order.cancelOrder();
         orderRepository.save(order);
     }
+    // 장바구니 주문하기
+    @Override
+    public Long orders(List<OrderDTO> orderDTOList, String email) {
+        Member member = memberRepository.findByEmail(email);
+        List<OrderItem> orderItemList = new ArrayList<>();
+        for(OrderDTO orderDTO : orderDTOList) {
+            //
+            Item item = itemRepository.findById(orderDTO.getItemId()).get();
+            OrderItem orderItem = OrderItem.builder()
+                    .item(item)
+                    .count(orderDTO.getCount())
+                    .orderPrice(item.getPrice())
+                    .build();
+            orderItemList.add(orderItem);
+        }
+        Order order = Order.createOrder(member, orderItemList);
+        orderRepository.save(order);
+        return order.getId();
+    }
 }

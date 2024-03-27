@@ -22,9 +22,6 @@ public class MainController {
         PageResultDTO< MainItemDTO,Object[]> result = itemService.getMainList(requestDTO);
         model.addAttribute("result", result);
         List<MainItemDTO> lists = result.getDtoList();
-        for(MainItemDTO dto: lists) {
-            System.out.println(dto.toString());
-        }
         return "main";
     }
 }
