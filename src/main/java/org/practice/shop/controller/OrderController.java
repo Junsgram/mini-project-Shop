@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -33,12 +30,12 @@ public class OrderController {
         System.out.println("Order 호출");
         String email = principal.getName();
         Long orderId;
-        try{
+        try {
             orderId = orderService.order(orderDTO, email);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<Long>(orderId,HttpStatus.OK);
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }
 
     // 주문 목록 조회
@@ -47,5 +44,17 @@ public class OrderController {
         List<OrderHistDTO> result = orderService.getOrderList(principal.getName());
         model.addAttribute("result", result);
         return "/order/orderHist";
+    }
+
+    // 주문 취소
+    @PostMapping("/order/{orderId}/cancel")
+    public @ResponseBody ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId,
+                                                    Principal principal) {
+        // 로그인 사용자와 주문 취소하느 사용자가 일치하는 지 확인
+        if (!orderService.validateOrder(orderId, principal.getName())) {
+            return new ResponseEntity<String>("주문 취소 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+        orderService.cancelOrder(orderId);
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th ="www.thymeleaf.org">
+<html lang="en" xmlns:th ="http://www.thymeleaf.org">
 <th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
     <th:block th:fragment="content">
         <h1> 구매 내역 조회입니다. </h1>
@@ -8,7 +8,7 @@
                 <h4 th:text="${dto.orderDate}"></h4>
                 <div class="ml-3">
                     <th:block th:if="${dto.orderStatus==T(org.practice.shop.constant.OrderStatus).ORDER}">
-                        <button th:value="${dto.orderId}" th:onclick="cancelOrder(this.value)"> 주문 취소 </button>
+                        <button th:value="${dto.orderId}" onclick="cancelOrder(this.value)"> 주문 취소 </button>
                     </th:block>
                     <th:block th:unless="${dto.orderStatus==T(org.practice.shop.constant.OrderStatus).ORDER}">
                         <button> (취소 완료) </button>
@@ -17,12 +17,18 @@
             </div>
             <div class="card d-flex">
                 <div th:each="orderItem:${dto.orderItemDTOList}">
-                    <div class="repImgDiv">
-                        <img th:src="${orderItem.imgUrl}"/>
+                    <div class="repImgDiv w-25">
+                        <img th:src="${orderItem.imgUrl}" width="100%"/>
                     </div>
                     <div class="w-75">
                         <span th:text="${orderItem.itemNm}"></span>
-                        <p th:text="${orderItem.orderPrice}+'원'"></p>
+                        <th:block th:if="${orderItem.count > 1}">
+                            <p th:text="${orderItem.orderPrice*orderItem.count}+'원'"></p>
+                        </th:block>
+                        <th:block th:unless="${orderItem.count > 1}">
+                            <p th:text="${orderItem.orderPrice}+'원'"></p>
+                       </th:block>
+
                         <p th:text="${orderItem.count}+'개'"></p>
                     </div>
                 </div>
@@ -41,7 +47,7 @@
                 location.href="/orders"
             },
             error(error) {
-                alert(error.response.getText);
+                alert(error.responseText);
             }
         })
     }

@@ -30,7 +30,7 @@ public class Item extends BaseEntity {
     @Column(nullable = false)
     private int stockNum; // 재고수량
 
-    @Lob // BLOB타입을s 매핑해준다 ( 상세설명과 같은 작성할 것이 많은 것을 BLOCK타입으로 지정)
+    @Lob // BLOB타입을 매핑해준다 ( 상세설명과 같은 작성할 것이 많은 것을 BLOCK타입으로 지정)
     @Column(nullable =false)
     private String itemDetail; // 상세설명
 
@@ -54,5 +54,10 @@ public class Item extends BaseEntity {
             throw new OutOfStockException("상품의 재고가 부족합니다. (현재 재고 수량 : " + this.stockNum+")");
         }
         this.stockNum = restStock;
+    }
+
+    // 주문 취소 시 취소한 상품의 개수만큼 재고 수 더하기
+    public void addStock(int stockNum) {
+        this.stockNum += stockNum;
     }
 }

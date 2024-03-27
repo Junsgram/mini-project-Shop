@@ -53,8 +53,10 @@ public class ItemImgServiceImpl implements ItemImgService{
         // itemImgUpdate
         Optional<ItemImg> result = itemImgRepository.findById(itemImgId);
         ItemImg itemImg = result.get();
+        // 원본 이미지 보관
+        String oriImgName = multipartFile.getOriginalFilename();
         // 이미지 이름이 비어있지 않으면
-        if (!StringUtils.isEmpty(itemImg.getImgName())) {
+        if (!StringUtils.isEmpty(itemImg.getImgName()) && oriImgName.length() > 0) {
             fileService.deleteFile(itemImgLocation + "/" + itemImg.getImgName());
         }
         // 이미지 업로드
@@ -62,7 +64,7 @@ public class ItemImgServiceImpl implements ItemImgService{
         if(!StringUtils.isEmpty(oriImgName1)) {
             String imgName = fileService.uploadFile(itemImgLocation, oriImgName1, multipartFile.getBytes());
             // 상품 이미지
-            String imgUrl = "/images/item" + imgName;
+            String imgUrl = "/images/item/" + imgName;
             itemImg.update(oriImgName1, imgName, imgUrl);
             itemImgRepository.save(itemImg);
         }
