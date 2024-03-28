@@ -1,6 +1,7 @@
 package org.practice.shop.controller;
 
 import org.practice.shop.dto.ItemDTO;
+import org.practice.shop.dto.MainItemDTO;
 import org.practice.shop.dto.PageRequestDTO;
 import org.practice.shop.dto.PageResultDTO;
 import org.practice.shop.entity.Item;
@@ -68,5 +69,12 @@ public class ItemController {
         ItemDTO itemDTO = itemService.getItem(itemId);
         model.addAttribute("itemDTO", itemDTO);
         return "item/detailView";
+    }
+
+    @GetMapping("/item/list")
+    public String itemList(PageRequestDTO pageRequestDTO, Model model) {
+        PageResultDTO<MainItemDTO, Object[]> result = itemService.getSearchList(pageRequestDTO);
+        model.addAttribute("result", result);
+        return "/item/list";
     }
 }

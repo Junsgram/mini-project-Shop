@@ -13,6 +13,7 @@
                     <th:block th:unless="${dto.orderStatus==T(org.practice.shop.constant.OrderStatus).ORDER}">
                         <button> (취소 완료) </button>
                     </th:block>
+                    <button th:value="${dto.orderId}" onclick="removeOrder(this.value)"> 구매이력삭제 </button>
                 </div>
             </div>
             <div class="card d-flex">
@@ -48,6 +49,20 @@
             },
             error(error) {
                 alert(error.responseText);
+            }
+        })
+    }
+    function removeOrder(orderId) {
+        $.ajax({
+            url: "/order/"+orderId,
+            type: "delete",
+            dataType : "json",
+            success : function(result) {
+                alert("주문이 삭제 되었습니다");
+                location.href = "/orders";
+            },
+            error: function(error) {
+              alert(error.responseText);
             }
         })
     }

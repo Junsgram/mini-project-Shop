@@ -16,5 +16,7 @@ public interface OrderService {
     public void cancelOrder(Long orderId);
     // 장바구니 리스트 주문하기
     public Long orders(List<OrderDTO> orderDTOList, String email);
+    // 주문 항목 삭제하기
+    public void deleteOrder(Long OrderId);
 
 }

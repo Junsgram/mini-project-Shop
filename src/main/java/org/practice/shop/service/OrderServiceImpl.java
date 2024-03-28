@@ -124,4 +124,10 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
         return order.getId();
     }
+    // 주문 삭제하기
+    @Override
+    public void deleteOrder(Long OrderId) {
+        Order order = orderRepository.findById(OrderId).get();
+        orderRepository.delete(order);
+    }
 }
