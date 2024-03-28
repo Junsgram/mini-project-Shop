@@ -122,4 +122,15 @@ public class ItemRepositoryTests {
             System.out.println(Arrays.toString(obj));
         }
     }
+
+    @DisplayName("게시글 리스트 검색 테스트")
+    @Test
+    void searchList(){
+        Pageable pageable = PageRequest.of(0,3,Sort.by("id").descending());
+        Page<Object[]> result = itemRepository.getList(pageable, "테스트");
+        List<Object[]> list = result.getContent();
+        for(Object[] obj: list) {
+            System.out.println(Arrays.toString(obj));
+        }
+    }
 }

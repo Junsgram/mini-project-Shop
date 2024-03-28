@@ -105,4 +105,14 @@ public class ItemServiceImpl implements ItemService {
         });
         return new PageResultDTO<>(result,fn);
     }
+
+    @Override
+    public PageResultDTO<MainItemDTO, Object[]> getSearchList(PageRequestDTO pageRequestDTO) {
+        Page<Object[]> result = itemRepository.getList(pageRequestDTO.getPageable(Sort.by("id").descending()),
+                pageRequestDTO.getKeyword());
+        Function<Object[], MainItemDTO> fn = (arr -> {
+            return entityObjToDTO((Item) arr[0], (ItemImg) arr[1]);
+        });
+        return new PageResultDTO<>(result, fn);
+    }
 }

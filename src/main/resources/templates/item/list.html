@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <h1>상품페이지</h1>
+        <div class="row">
+            <th:block th:each="dto:${result.dtoList}">
+                <div class="col-md-4 margin">
+                    <a th:href="@{'/item/'+${dto.id}}">
+                        <div class="card">
+                            <img th:src="@{${dto.imgUrl}}" height="400">
+                            <div class="card-body">
+                                <h4 class="card-title">[[${dto.itemNm}]]</h4>
+                                <p class="card-text">[[${dto.price}]]원</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </th:block>
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li th:if="${result.prev}" class="page-item"><a class="page-link"
+                                                                href="#">Previous</a></li>
+                <li class="page-item" th:each="page:${result.pageList}">
+                    <a class="page-link" th:href="@{/item/list(page=${page},size=9)}">
+                        [[${page}]]</a>
+                </li>
+                <li class="page-item" th:if="${result.next}">
+                    <a class="page-link" href="#">Next</a></li>
+            </ul>
+        </nav>
+    </th:block>
+</th:block>
+</html>

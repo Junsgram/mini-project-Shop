@@ -33,4 +33,9 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
             " on m.item = i where m.repimgYn = 'Y'")
     Page<Object[]> getListPage(Pageable pageable);
 
+    // 상품 리스트 제목으로 검색 조회
+    @Query("select i,m from Item i left outer join ItemImg m " +
+            "on m.item = i where m.repimgYn = 'Y' and i.itemNm like %:keyword%")
+    Page<Object[]> getList(Pageable pageable, @Param("keyword") String keyword);
+
 }

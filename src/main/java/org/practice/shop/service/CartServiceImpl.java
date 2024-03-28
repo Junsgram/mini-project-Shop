@@ -36,6 +36,7 @@ public class CartServiceImpl implements CartService {
         Item item = itemRepository.findById(cartItemDTO.getItemId()).get();
         // 현재 로그인한 장바구니 엔티티 조회
         Cart cart = cartRepository.findByMemberId(member.getId());
+        item.removeStock(cartItemDTO.getCount());
         // 상품을 처음으로 장바구니에 담았을 때 해당 회원의 장바구니를 생성
         // 로그인한 회원의 cart가 없는경우 cart엔티티에 insert 생성 진행.
         if (cart == null) {
@@ -98,6 +99,7 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.delete(cartItem);
     }
 
+    // 장바구니 주문
     @Override
     public long orderCartItem(List<CartOrderDTO> cartOrderDTOList, String email) {
         // 컨트롤러에서 전달받은 cartOrderDTOList -> List<OrderDTO>로 변환

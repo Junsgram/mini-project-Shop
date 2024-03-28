@@ -21,6 +21,8 @@ public interface ItemService {
     PageResultDTO<ItemDTO, Item> getList(PageRequestDTO requestDTO);
     // 메인 상품 조회
     PageResultDTO<MainItemDTO, Object[]> getMainList(PageRequestDTO requestDTO);
+    // 아이템 조회
+    PageResultDTO<MainItemDTO,Object[]> getSearchList(PageRequestDTO pageRequestDTO);
 
     // dto -> entity 변환
     default Item dtoToEntity(ItemDTO itemDTO) {
